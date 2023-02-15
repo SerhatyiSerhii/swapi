@@ -1,1 +1,15 @@
-<planets-wrapper></planets-wrapper>
+<div class="container">
+    <div class="planet-controls">
+        <planets-dropdown
+            [planets]="planets"
+            [nextPlanetAddress]="nextPlanetAddress"
+            (selectedPlanet)="showSelectedPlanet($event)"
+            (loadNextPlanet)="loadPlanet()"
+            ></planets-dropdown>
+        <planets-table [selectedPlanet]="selectedPlanet" *ngIf="selectedPlanet" (showSpinner)="showSpinner($event)"></planets-table>
+        <div *ngIf="showError">Oops, something wrong with the server :(</div>
+    </div>
+    <div class="spinner" *ngIf="isSpinnerShown">
+        <mat-spinner></mat-spinner>
+    </div>
+</div>
