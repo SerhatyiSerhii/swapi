@@ -1,6 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { IResident } from "src/app/models/resident.interface";
+import { IResident } from "src/app/models/index";
 
 @Component(({
     selector: 'planets-dialog',
@@ -13,4 +13,9 @@ export class PlanetsDialogComponent {
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: IResident[]
     ) { }
+
+    // Check if the value from table is numeric
+    isNumber(arg: number): boolean {
+        return isNaN(arg);
+    }
 }

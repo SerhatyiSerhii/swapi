@@ -1,10 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, of } from "rxjs";
-import { switchMap, tap } from "rxjs/operators";
-import { IBackEndPlanetItem } from "../models/back-end-planet-item.interface";
-import { IPlanetItem } from "../models/planet-item.interface";
-import { IResident } from "../models/resident.interface";
+import { forkJoin, Observable } from "rxjs";
+import { IPlanetsResponse, IResident } from "../models/index";
 
 @Injectable({
     providedIn: 'root'
@@ -18,36 +15,16 @@ export class ApiService {
 
     constructor(private http: HttpClient) { }
 
-    getPlanets(): Observable<IPlanetItem[]> {
-        return this.performPlanetsRequest(this.planetsAddress, []);
+    getPlanet(planetAddress: string): Observable<IPlanetsResponse> {
+        // If address is empty string - use base url, otherwise - use address as url
+        return this.http.get<IPlanetsResponse>(planetAddress ? planetAddress : this.planetsAddress);
     }
 
-    getResidents(arr: string[]): Observable<IResident[]> {
-        return this.performResidentsRequest(arr, 0, []);
+    getResidents(residents: string[]) {
+        return this.performResidentsRequest(residents);
     }
 
-    private performPlanetsRequest(url: string, planets: IPlanetItem[]): Observable<IPlanetItem[]> {
-        if (url) {
-            return this.http.get<IBackEndPlanetItem>(url).pipe(
-                switchMap((response: IBackEndPlanetItem) => {
-                    return this.performPlanetsRequest(response.next, [...planets, ...response.results]);
-                })
-            );
-        } else {
-            return of(planets);
-        }
-    }
-
-    private performResidentsRequest(arr: string[], index: number, result: IResident[]): Observable<IResident[]> {
-        if (index < arr.length) {
-            return this.http.get<IResident>(arr[index]).pipe(
-                tap(res => result.push(res)),
-                switchMap(() => {
-                    return this.performResidentsRequest(arr, index + 1, result);
-                })
-            )
-        } else {
-            return of(result);
-        }
+    private performResidentsRequest(residents: string[]): Observable<IResident[]> {
+        return forkJoin(residents.map(resident => this.http.get<IResident>(resident)));
     }
 }

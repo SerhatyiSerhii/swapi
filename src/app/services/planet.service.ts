@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
-import { Observable, throwError } from "rxjs";
-import { IPlanetItem } from "../models/planet-item.interface";
-import { IResident } from "../models/resident.interface";
+import { Observable } from "rxjs";
+import { IPlanetsResponse, IResident } from "../models/index";
 import { ApiService } from "./api.service";
 
 @Injectable({
@@ -13,8 +12,8 @@ export class PlanetService {
         private api: ApiService
     ) { }
 
-    getPlanets(): Observable<IPlanetItem[]> {
-        return this.api.getPlanets();
+    getPlanet(address: string): Observable<IPlanetsResponse> {
+        return this.api.getPlanet(address);
     }
 
     getResidents(residents: string[]): Observable<IResident[]> {
