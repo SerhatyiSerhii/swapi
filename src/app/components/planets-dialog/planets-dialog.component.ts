@@ -1,6 +1,6 @@
 import { Component, Inject } from "@angular/core";
 import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { IResident } from "src/app/models/index";
+import { IResident } from "src/app/models";
 
 @Component(({
     selector: 'planets-dialog',

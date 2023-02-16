@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { finalize } from "rxjs";
-import { IPlanet, IResident } from "src/app/models/index";
+import { IPlanet, IResident } from "src/app/models";
 import { PlanetService } from "src/app/services/planet.service";
 import { PlanetsDialogComponent } from "../planets-dialog/planets-dialog.component";
 

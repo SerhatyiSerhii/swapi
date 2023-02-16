@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { finalize } from 'rxjs';
-import { IPlanet, IPlanetsResponse } from './models/index';
+import { IPlanet, IPlanetsResponse } from './models';
 import { PlanetService } from './services/planet.service';
 
 @Component({

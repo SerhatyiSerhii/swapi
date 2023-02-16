@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { forkJoin, Observable } from "rxjs";
-import { IPlanetsResponse, IResident } from "../models/index";
+import { IPlanetsResponse, IResident } from "../models";
 
 @Injectable({
     providedIn: 'root'
