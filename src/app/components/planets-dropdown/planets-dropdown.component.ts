@@ -5,7 +5,7 @@ import { IPlanet } from "src/app/models";
 @Component({
     selector: 'planets-dropdown',
     templateUrl: './planets-dropdown.component.html',
-    styleUrls: ['./planets-dropdown.component.scss']
+    styleUrls: []
 })
 export class PlanetsDropdownComponent {
     @Input() planets: IPlanet[];
