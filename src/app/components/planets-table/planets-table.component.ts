@@ -16,6 +16,7 @@ export class PlanetsTableCOmponent implements OnChanges {
     displayedColumns: string[] = ['name', 'diameter', 'climate', 'population'];
     residents: IResident[] = [];
     showError: boolean = false;
+    loadCompleted: boolean = false;
 
     constructor(
         private dialog: MatDialog,
@@ -27,11 +28,13 @@ export class PlanetsTableCOmponent implements OnChanges {
             // If new planet was selected - show spinner and remove error messages
             this.showSpinner.emit(true);
             this.showError = false;
+            this.loadCompleted = false;
 
             if (this.selectedPlanet) {
                 this.api.getResidents(this.selectedPlanet.residents).pipe(
                     finalize(() => {
                         this.showSpinner.emit(false);
+                        this.loadCompleted = true;
                     })
                 ).subscribe(
                     {
@@ -48,7 +51,9 @@ export class PlanetsTableCOmponent implements OnChanges {
     }
 
     openDialog(): void {
-        this.dialog.open(PlanetsDialogComponent, { data: this.residents, width: '80%', });
+        if (this.loadCompleted) {
+            this.dialog.open(PlanetsDialogComponent, { data: this.residents, width: '80%' });
+        }        
     }
 
     // Check if the value from table is numeric
