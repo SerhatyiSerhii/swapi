@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,8 +33,7 @@ import { PlanetsTableCOmponent } from './components/planets-table/planets-table.
     MatSelectModule,
     MatTableModule,
     FormsModule,
-    ReactiveFormsModule,
-    ScrollingModule
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
