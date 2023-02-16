@@ -8,7 +8,7 @@ import { IPlanet } from "src/app/models/index";
 })
 export class PlanetsDropdownComponent {
     @Input() planets: IPlanet[] = [];
-    @Input() nextPlanetAddress: string = '';
+    @Input() loadNext: boolean = false;
     @Output() selectedPlanet: EventEmitter<string> = new EventEmitter<string>();
     @Output() loadNextPlanet: EventEmitter<void> = new EventEmitter<void>();
 
@@ -26,7 +26,7 @@ export class PlanetsDropdownComponent {
             // Ask parent to load new planet if there is next address and scrolled to the bottom
             if (
                 this.planetsScrollList!.scrollTop === this.planetsScrollList!.scrollHeight - this.planetsScrollList!.clientHeight &&
-                this.nextPlanetAddress
+                this.loadNext
             ) {
                 this.loadNextPlanet.emit();
             }

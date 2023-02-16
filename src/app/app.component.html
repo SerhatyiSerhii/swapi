@@ -2,7 +2,7 @@
     <div class="planet-controls">
         <planets-dropdown
             [planets]="planets"
-            [nextPlanetAddress]="nextPlanetAddress"
+            [loadNext]="!!nextPlanetAddress"
             (selectedPlanet)="showSelectedPlanet($event)"
             (loadNextPlanet)="loadPlanet()"
             ></planets-dropdown>
