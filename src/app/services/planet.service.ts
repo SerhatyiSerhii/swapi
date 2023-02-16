@@ -1,22 +1,32 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { IPlanetsResponse, IResident } from "../models/index";
-import { ApiService } from "./api.service";
+import { forkJoin, Observable } from "rxjs";
+import { IPlanetsResponse, IResident } from "../models";
 
 @Injectable({
     providedIn: 'root'
 })
 export class PlanetService {
+    private baseUrl: string = 'https://swapi.dev/api'
 
-    constructor(
-        private api: ApiService
-    ) { }
-
-    getPlanet(address: string): Observable<IPlanetsResponse> {
-        return this.api.getPlanet(address);
+    private get planetsAddress(): string {
+        return this.baseUrl + '/planets';
     }
 
-    getResidents(residents: string[]): Observable<IResident[]> {
-        return this.api.getResidents(residents);
+    constructor(
+        private http: HttpClient
+    ) { }
+
+    getPlanet(planetAddress: string): Observable<IPlanetsResponse> {
+        // If address is empty string - use base url, otherwise - use address as url
+        return this.http.get<IPlanetsResponse>(planetAddress ? planetAddress : this.planetsAddress);
+    }
+
+    getResidents(residents: string[]) {
+        return this.performResidentsRequest(residents);
+    }
+
+    private performResidentsRequest(residents: string[]): Observable<IResident[]> {
+        return forkJoin(residents.map(resident => this.http.get<IResident>(resident)));
     }
 }

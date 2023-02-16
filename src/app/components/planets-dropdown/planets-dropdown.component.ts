@@ -1,18 +1,19 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { MatSelectChange } from "@angular/material/select";
-import { IPlanet } from "src/app/models/index";
+import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { MatSelect, MatSelectChange } from "@angular/material/select";
+import { fromEvent } from "rxjs";
+import { IPlanet } from "src/app/models";
 @Component({
     selector: 'planets-dropdown',
     templateUrl: './planets-dropdown.component.html',
     styleUrls: ['./planets-dropdown.component.scss']
 })
 export class PlanetsDropdownComponent {
-    @Input() planets: IPlanet[] = [];
-    @Input() nextPlanetAddress: string = '';
+    @Input() planets: IPlanet[];
+    @Input() loadNext: boolean = false;
     @Output() selectedPlanet: EventEmitter<string> = new EventEmitter<string>();
     @Output() loadNextPlanet: EventEmitter<void> = new EventEmitter<void>();
 
-    planetsScrollList: Element | undefined;
+    @ViewChild('scrollPanel') scrollPanel: MatSelect;
 
     selectPlanet(event: MatSelectChange): void {
         // Pass the name of the selected planet to parent
@@ -20,13 +21,12 @@ export class PlanetsDropdownComponent {
     }
 
     loadMorePlanets(): void {
-        this.planetsScrollList = document.querySelector('.scroll-list')!;
+        const planetsPanel = this.scrollPanel.panel.nativeElement;
 
-        this.planetsScrollList.addEventListener('scroll', () => {
-            // Ask parent to load new planet if there is next address and scrolled to the bottom
+        fromEvent(planetsPanel, 'scroll').subscribe(() => {
             if (
-                this.planetsScrollList!.scrollTop === this.planetsScrollList!.scrollHeight - this.planetsScrollList!.clientHeight &&
-                this.nextPlanetAddress
+                planetsPanel.scrollTop === planetsPanel.scrollHeight - planetsPanel.clientHeight &&
+                this.loadNext
             ) {
                 this.loadNextPlanet.emit();
             }

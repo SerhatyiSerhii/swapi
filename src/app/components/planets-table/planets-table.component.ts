@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { finalize } from "rxjs";
-import { IPlanet, IResident } from "src/app/models/index";
+import { IPlanet, IResident } from "src/app/models";
 import { PlanetService } from "src/app/services/planet.service";
 import { PlanetsDialogComponent } from "../planets-dialog/planets-dialog.component";
 
@@ -16,32 +16,34 @@ export class PlanetsTableCOmponent implements OnChanges {
     displayedColumns: string[] = ['name', 'diameter', 'climate', 'population'];
     residents: IResident[] = [];
     showError: boolean = false;
-    
+
     constructor(
         private dialog: MatDialog,
         private api: PlanetService
     ) { }
 
-    ngOnChanges(): void {
-        // If new planet was selected - show spinner and remove error messages
-        this.showSpinner.emit(true);
-        this.showError = false;
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['selectedPlanet']) {
+            // If new planet was selected - show spinner and remove error messages
+            this.showSpinner.emit(true);
+            this.showError = false;
 
-        if (this.selectedPlanet) {
-            this.api.getResidents(this.selectedPlanet.residents).pipe(
-                finalize(() => {
-                    this.showSpinner.emit(false);
-                })
-            ).subscribe(
-                {
-                    next: (res) => {
-                        this.residents = res.sort((a, b) => a.name.localeCompare(b.name));
-                    },
-                    error: () => {
-                        this.showError = true;
+            if (this.selectedPlanet) {
+                this.api.getResidents(this.selectedPlanet.residents).pipe(
+                    finalize(() => {
+                        this.showSpinner.emit(false);
+                    })
+                ).subscribe(
+                    {
+                        next: (res) => {
+                            this.residents = res.sort((a, b) => a.name.localeCompare(b.name));
+                        },
+                        error: () => {
+                            this.showError = true;
+                        }
                     }
-                }
-            );
+                );
+            }
         }
     }
 

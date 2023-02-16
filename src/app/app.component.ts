@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { finalize } from 'rxjs';
-import { IPlanet, IPlanetsResponse } from './models/index';
+import { IPlanet, IPlanetsResponse } from './models';
 import { PlanetService } from './services/planet.service';
 
 @Component({
@@ -24,9 +24,9 @@ export class AppComponent {
     this.loadPlanet();
   }
 
-  showSelectedPlanet(planet: string): void {
+  showSelectedPlanet(planetName: string): void {
     // Find selected planet
-    this.selectedPlanet = this.planets.find(item => item.name === planet)!;
+    this.selectedPlanet = this.planets.find(item => item.name === planetName)!;
   }
 
   showSpinner(show: boolean): void {
@@ -36,9 +36,7 @@ export class AppComponent {
 
   loadPlanet(): void {
     // Show spinner on uploading of new planet
-    if (!this.isSpinnerShown) {
-      this.isSpinnerShown = true;
-    }
+    this.isSpinnerShown = true;
 
     // Load planet
     this.planetService.getPlanet(this.nextPlanetAddress).pipe(
